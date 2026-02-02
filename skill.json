@@ -3,39 +3,39 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:us-east-1:388806798322:function:b401a0f7-35a7-4480-b780-2d6cc16fa517:Release_0"
+          "sourceDir": "lambda",
+          "runtime": "python3.11"
         },
-        "interfaces": [],
-        "locales": {},
-        "regions": {
-          "NA": {
-            "endpoint": {
-              "uri": "arn:aws:lambda:us-east-1:388806798322:function:b401a0f7-35a7-4480-b780-2d6cc16fa517:Release_0"
-            }
-          },
-          "EU": {
-            "endpoint": {
-              "uri": "arn:aws:lambda:eu-west-1:388806798322:function:b401a0f7-35a7-4480-b780-2d6cc16fa517:Release_0"
-            }
-          },
-          "FE": {
-            "endpoint": {
-              "uri": "arn:aws:lambda:us-west-2:388806798322:function:b401a0f7-35a7-4480-b780-2d6cc16fa517:Release_0"
-            }
-          }
-        }
+        "interfaces": []
       }
     },
     "manifestVersion": "1.0",
+    "permissions": [],
+    "privacyAndCompliance": {
+      "allowsPurchases": false,
+      "isChildDirected": false,
+      "isExportCompliant": true,
+      "containsAds": false,
+      "usesPersonalInfo": false
+    },
     "publishingInformation": {
       "distributionCountries": [],
       "isAvailableWorldwide": true,
+      "distributionMode": "PUBLIC",
       "locales": {
         "pt-BR": {
-          "name": "Gemini"
+          "name": "Gemini",
+          "summary": "Assistente inteligente com Gemini AI",
+          "description": "Uma skill que usa a API do Google Gemini para responder perguntas de forma inteligente.",
+          "examplePhrases": [
+            "Alexa, abrir chat avançado",
+            "o que é inteligência artificial",
+            "me fale sobre o clima"
+          ],
+          "keywords": ["gemini", "ai", "assistente", "inteligência artificial"]
         }
       },
-      "testingInstructions": "Sample Testing Instructions."
+      "testingInstructions": "Abra a skill dizendo 'Alexa, abrir chat avançado' e faça perguntas."
     }
   }
 }
