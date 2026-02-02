@@ -22,12 +22,18 @@
           "slots": [
             {
               "name": "query",
-              "type": "AMAZON.Person"
+              "type": "AMAZON.SearchQuery"
             }
           ],
           "name": "GptQueryIntent",
           "samples": [
-            "{query}"
+            "{query}",
+            "pergunte {query}",
+            "me fale sobre {query}",
+            "o que é {query}",
+            "quero saber {query}",
+            "explique {query}",
+            "pesquise {query}"
           ]
         }
       ],

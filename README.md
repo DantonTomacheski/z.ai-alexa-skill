@@ -1,4 +1,4 @@
-# 🤖 Alexa com GLM-4.7 da Z.AI
+# 🤖 Alexa com Gemini
 
 Bem-vindo(a) ao projeto **Alexa com GLM-4.7**, uma adaptação do repositório [skill-alexa-chatgpt4](https://github.com/alexandremendoncaalvaro/skill-alexa-chatgpt4), agora utilizando a **API da Z.AI** com o modelo **GLM-4.7** para dar voz à inteligência artificial.
 
@@ -6,7 +6,7 @@ Bem-vindo(a) ao projeto **Alexa com GLM-4.7**, uma adaptação do repositório [
 
 ## 📚 Sobre o Projeto
 
-Este projeto tem como objetivo integrar a assistente virtual **Alexa** com a **API Z.AI**, permitindo interações mais naturais e inteligentes com o usuário. A base foi construída sobre o repositório criado por [alexandremendoncaalvaro](https://github.com/alexandremendoncaalvaro), com adaptações para utilizar o modelo `glm-4.7`.
+Este projeto integra a assistente virtual **Alexa** com a **API do Gemini**, permitindo interações mais naturais e inteligentes com o usuário.
 
 ---
 
@@ -32,8 +32,14 @@ Este projeto é uma adaptação direta de:
 - **Alexa Skills Kit (ASK)**
 - **Python 3**
 - **AWS Lambda**
-- **Z.AI API**
-- **GLM-4.7**
+- **Gemini API**
+
+## 🔐 Configuração
+
+- Defina a variável de ambiente `GEMINI_API_KEY` na sua AWS Lambda.
+- (Opcional) Defina `GEMINI_MODEL` (padrão: `gemini-3-flash-preview`).
+- (Opcional) Defina `GEMINI_THINKING_LEVEL` com `LOW`, `MEDIUM` ou `HIGH` (padrão: `HIGH`).
+- (Opcional) Defina `GEMINI_ENABLE_GOOGLE_SEARCH=1` para habilitar Google Search grounding.
 
 ---
 

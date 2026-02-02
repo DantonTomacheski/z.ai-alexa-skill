@@ -1,5 +1,6 @@
 import os
 import logging
+import functools
 import ask_sdk_core.utils as ask_utils
 
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -9,23 +10,63 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model import Response
 
-from openai import OpenAI
+from google import genai
+from google.genai import types
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-openai_api_key = "SUA-APIKEY-Z.AI"
+MODEL = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview").strip()
 
-client = OpenAI(api_key=openai_api_key, base_url="https://api.z.ai/api/paas/v4/")
+THINKING_LEVEL = os.getenv("GEMINI_THINKING_LEVEL", "MEDIUM").strip().upper()
+ENABLE_GOOGLE_SEARCH = os.getenv("GEMINI_ENABLE_GOOGLE_SEARCH", "1").strip().lower() in (
+    "1",
+    "true",
+    "yes",
+)
 
-MODEL = "glm-4.7"
+SYSTEM_PROMPT = (
+    "Você é uma assistente muito útil. "
+    "Responda de forma clara e concisa em Português do Brasil. "
+    "Toda resposta deve ter, no máximo, 4000 caracteres e o texto deve ser corrido."
+)
 
-messages = [
-    {
-        "role": "system",
-        "content": "Você é uma assistente muito útil. Por favor, responda de forma clara e concisa em Português do Brasil. Toda resposta deve ter, no máximo, 400 caracteres e o texto deve ser corrido.",
-    }
-]
+
+def _truncate_4000(text: str) -> str:
+    if not text:
+        return ""
+    return text.strip()[:4000]
+
+@functools.lru_cache(maxsize=1)
+def _get_genai_client() -> genai.Client:
+    api_key = (os.getenv("GEMINI_API_KEY") or "").strip()
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY não configurada no ambiente.")
+
+    return genai.Client(api_key=api_key)
+
+
+def _mensagem_amigavel_erro_gemini(exc: Exception) -> str:
+    msg = str(exc) or type(exc).__name__
+    return _truncate_4000(f"Erro ao chamar a API do Gemini: {msg}")
+
+_history = []
+
+
+def _build_generate_content_config() -> types.GenerateContentConfig:
+    cfg = types.GenerateContentConfig(
+        system_instruction=SYSTEM_PROMPT,
+        temperature=0.6,
+        max_output_tokens=4000,
+    )
+
+    if THINKING_LEVEL in ("LOW", "MEDIUM", "HIGH"):
+        cfg.thinking_config = types.ThinkingConfig(thinking_level=THINKING_LEVEL)
+
+    if ENABLE_GOOGLE_SEARCH:
+        cfg.tools = [types.Tool(google_search=types.GoogleSearch())]
+
+    return cfg
 
 
 class LaunchRequestHandler(AbstractRequestHandler):
@@ -37,7 +78,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         speak_output = (
-            "Bem vindo ao assistente G.L.M. 4.7! Qual a sua pergunta?"
+            "Bem vindo ao assistente Gemini! Qual a sua pergunta?"
         )
 
         return (
@@ -66,17 +107,38 @@ class GptQueryIntentHandler(AbstractRequestHandler):
 
 def generate_gpt_response(query):
     try:
-        messages.append(
-            {"role": "user", "content": query},
+        if not query:
+            return "Diga sua pergunta, por favor."
+
+        client = _get_genai_client()
+
+        # Mantém histórico leve (máx. 10 pares) entre invocações do Lambda.
+        contents = []
+        for item in _history[-20:]:
+            contents.append(
+                types.Content(
+                    role=item["role"],
+                    parts=[types.Part.from_text(text=item["text"])],
+                )
+            )
+        contents.append(
+            types.Content(role="user", parts=[types.Part.from_text(text=query)])
         )
-        response = client.chat.completions.create(
-            model=MODEL, messages=messages, stream=False, max_tokens=500 #, temperature=0.8
+
+        response = client.models.generate_content(
+            model=MODEL,
+            contents=contents,
+            config=_build_generate_content_config(),
         )
-        reply = response.choices[0].message.content
-        messages.append({"role": "assistant", "content": reply})
-        return reply
+
+        reply = _truncate_4000(getattr(response, "text", "") or "")
+
+        _history.append({"role": "user", "text": query})
+        _history.append({"role": "model", "text": reply})
+        return reply or "Desculpe, não consegui gerar uma resposta agora."
     except Exception as e:
-        return f"Erro ao gerar resposta: {str(e)}"
+        logger.error("Erro na chamada Gemini: %s", str(e), exc_info=True)
+        return _mensagem_amigavel_erro_gemini(e)
 
 
 class HelpIntentHandler(AbstractRequestHandler):

@@ -1,0 +1,46 @@
+# Achados
+
+## Observações
+
+- Tentativa de usar localViewStructure (mcp_octocode) falhou por erro de schema: "must NOT have additional properties".
+- Integração atual em lambda/lambda_function.py: usa `ZaiClient(api_key=...)` com chave hardcoded e `model="glm-4.7"` em `client.chat.completions.create(...)`.
+- Script lambda/test_api_key.py repete a mesma key hardcoded e aponta erro 429 como “rate limit ou saldo insuficiente”.
+- README confirma objetivo de usar Z.AI API com modelo GLM-4.7.
+- Estrutura em .github/skills contém instruções obrigatórias adicionais; leitura pendente dos arquivos internos.
+- Lido: .github/skills/planejamento-com-arquivos/SKILL.md (regra das 2 ações, registrar erros no plano).
+- Lido: .github/skills/checklist-revisao-codigo/SKILL.md (checklist revisão, destaque para evitar segredos hardcoded).
+- Lido: .github/skills/correcao-testes/SKILL.md (processo sistemático para corrigir testes).
+- Lido: .github/skills/depuracao-sistematica/SKILL.md (exige investigar causa raiz antes de correções).
+- Lidos: defesa-em-profundidade.md e encontrar-poluidor.sh (validação em camadas, script de bisseção para testes poluidores).
+- Lidos: espera-baseada-em-condicao.md e exemplo-espera-baseada-em-condicao.ts (evitar timeouts arbitrários, esperar condições reais).
+- Lidos: pressao-teste-1.md e pressao-teste-2.md (cenários de pressão para seguir depuração sistemática).
+- Lidos: pressao-teste-3.md e rastreamento-causa-raiz.md (pressão social e rastreio de causa raiz).
+- Lidos: registro-criacao.md e teste-academico.md (metadados e perguntas sobre a skill de depuração).
+- Lido: .github/skills/especialista-typescript/SKILL.md (boas práticas TS; usar ferramentas internas primeiro).
+- Lido: especialista-typescript/referencias/resumo-typescript.md (guia rápido TS).
+- Lidos: tipos-utilitarios.ts e tsconfig-estrito.json (utilitários TS e config estrita).
+- Lido: especialista-typescript/scripts/diagnostico_ts.py (script de diagnóstico TS).
+- Lido: .github/skills/melhores-praticas-nextjs/SKILL.md (princípios do Next.js App Router).
+- Lido: .github/skills/otimizacao-performance-web/SKILL.md (processo de otimização de performance web).
+- Lido: .github/skills/padroes-react/SKILL.md (padrões modernos de React).
+- Lido: .github/skills/padroes-testes/SKILL.md (padrões de testes e TDD).
+- Lido: .github/skills/padroes-ui-react/SKILL.md (padrões de UI React para loading/erro).
+- Lido: .github/skills/perfilamento-performance/SKILL.md (processo de perfilamento de performance).
+- Lido: perfilamento-performance/scripts/auditoria_lighthouse.py (script Lighthouse).
+- Lidos: planejamento-com-arquivos/exemplos.md e planejamento-com-arquivos/referencias.md (exemplos e princípios Manus).
+- Lidos: referencias/achados.md e referencias/plano_tarefa.md (templates de planejamento).
+- Lido: referencias/progresso.md (template de registro de progresso).
+- Diretório .github/instructions contém subpasta planejamento-com-arquivos; leitura pendente dos arquivos de instrução listados no sistema.
+- .github/instructions contém apenas planejamento-com-arquivos/ (não aparecem arquivos \*.instructions.md via busca).
+- Erro ao ler .github/instructions/exemplos-dados.instructions.md: arquivo inexistente.
+- Busca global por "\*.instructions.md" retornou vazia (arquivos listados no sistema não estão no repo).
+- Lidos: .github/instructions/planejamento-com-arquivos/exemplos.md e referencias.md.
+- Lidos: .github/instructions/planejamento-com-arquivos/referencias/achados.md e plano_tarefa.md.
+- Lido: .github/instructions/planejamento-com-arquivos/referencias/progresso.md.
+- Busca por Zai/GLM encontrou uso em lambda/lambda_function.py e lambda/test_api_key.py.
+- Integração ajustada para seguir docs: modelo em minúsculas ("glm-4.7") e API key via env (ZAI_API_KEY/ZHIPUAI_API_KEY) com seleção de cliente por ZAI_CLIENT.
+- Teste local falhou: comando `python` não encontrado; `python3` rodou, mas faltou a dependência `zai-sdk`.
+- Instalação via pip global falhou (PEP 668); instalação via venv funcionou e dependências foram instaladas.
+- Teste no venv falhou: variáveis ZAI_API_KEY/ZHIPUAI_API_KEY não estão definidas no ambiente do terminal.
+- Aviso da SDK: Pydantic v1 não compatível com Python 3.14 (warning ao importar a SDK).
+- Teste com ZAI_API_KEY definido retornou 429 (rate limit/saldo insuficiente) pela SDK.
