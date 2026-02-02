@@ -14,11 +14,11 @@ from openai import OpenAI
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-openai_api_key = "SUA-APIKEY-DEEPSEEK"
+openai_api_key = "SUA-APIKEY-Z.AI"
 
-client = OpenAI(api_key=openai_api_key, base_url="https://api.deepseek.com")
+client = OpenAI(api_key=openai_api_key, base_url="https://api.z.ai/api/paas/v4/")
 
-MODEL = "deepseek-chat"
+MODEL = "glm-4.7"
 
 messages = [
     {
@@ -37,7 +37,7 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         speak_output = (
-            "Bem vindo ao assistente 'dipi siqui'! Qual a sua pergunta?"
+            "Bem vindo ao assistente G.L.M. 4.7! Qual a sua pergunta?"
         )
 
         return (

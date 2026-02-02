@@ -32,7 +32,7 @@
       "isAvailableWorldwide": true,
       "locales": {
         "pt-BR": {
-          "name": "deepseek"
+          "name": "GLM 4.7"
         }
       },
       "testingInstructions": "Sample Testing Instructions."
